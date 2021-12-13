@@ -1,8 +1,68 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  Button,
+  Col,
+  Form,
+  FormFeedback,
+  FormGroup,
+  Input,
+  Label,
+} from "reactstrap";
 
 const Contact = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [telNum, setTelNum] = useState("Tel");
+  const [email, setEmail] = useState("");
+  const [agree, setAgree] = useState(false);
+  const [contactType, setContactType] = useState("Tel");
+  const [message, setMessage] = useState("");
+
+  const validate = (firstName, lastName, telNum, email) => {
+    const errors = {
+      firstName: "",
+      lastName: "",
+      telNum: "",
+      email: "",
+    };
+    if (firstName.length < 3)
+      errors.firstName = "First Name should be >= 3 characters";
+    else if (firstName.length > 10)
+      errors.firstName = "First Name should be <= 10 characters";
+    if (lastName.length < 3)
+      errors.lastName = "Last Name should be >= 3 characters";
+    else if (lastName.length > 10)
+      errors.lastName = "Last Name should be <= 10 characters";
+    const reg = /^\d+$/;
+    if (!reg.test(telNum))
+      errors.telNum = "Tel. Number should contain only numbers";
+    if (email.split("").filter((x) => x === "@").length !== 1)
+      errors.email = "Email should contain a @";
+
+    return errors;
+  };
+  const handleSubmit = (event) => {
+    console.log("Current state is: " + JSON.stringify(firstName, lastName));
+    alert("Current state is: " + JSON.stringify(telNum));
+    event.preventDefault();
+  };
+
+  const errors = () => {
+    validate(firstName, lastName, telNum, email);
+  };
   return (
     <div className="container">
+      <div className="row">
+        <Breadcrumb>
+          <BreadcrumbItem>
+            <Link to="/home">Home</Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem active>Contact Us </BreadcrumbItem>
+        </Breadcrumb>
+      </div>
       <div className="row row-content">
         <div className="col-12">
           <h3>Location Information</h3>
@@ -36,9 +96,7 @@ const Contact = () => {
             >
               <i className="fa fa-phone"></i> Call
             </a>
-            <a role="button" className="btn btn-info">
-              <i className="fa fa-skype"></i> Skype
-            </a>
+
             <a
               role="button"
               className="btn btn-success"
@@ -47,6 +105,127 @@ const Contact = () => {
               <i className="fa fa-envelope-o"></i> Email
             </a>
           </div>
+        </div>
+      </div>
+      <div className="row row-content">
+        <div className="col-12">
+          <h3>Send us Your Feedback</h3>
+        </div>
+        <div className="col-12 col-md-9">
+          <Form onSubmit={handleSubmit}>
+            <FormGroup row>
+              <Label htmlFor="firstname" md={2}>
+                First Name
+              </Label>
+              <Col md={10}>
+                <Input
+                  type="text"
+                  id="firstname"
+                  name="firstname"
+                  placeholder="First Name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                ></Input>
+                <FormFeedback>{errors.firstName} </FormFeedback>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label htmlFor="lastname" md={2}>
+                Last Name
+              </Label>
+              <Col md={10}>
+                <Input
+                  type="text"
+                  id="lastname"
+                  name="lastname"
+                  placeholder="Last Name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                ></Input>
+                <FormFeedback>{errors.lastName} </FormFeedback>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label htmlFor="telnum" md={2}>
+                Contact No
+              </Label>
+              <Col md={10}>
+                <Input
+                  type="tel"
+                  id="telnum"
+                  name="telnum"
+                  placeholder="Tel. Number"
+                  value={telNum}
+                  onChange={(e) => setTelNum(e.target.value)}
+                ></Input>
+                <FormFeedback>{errors.telNum} </FormFeedback>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label htmlFor="email" md={2}>
+                Email
+              </Label>
+              <Col md={10}>
+                <Input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                ></Input>
+                <FormFeedback>{errors.email} </FormFeedback>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col md={{ size: 6, offset: 2 }}>
+                <FormGroup check>
+                  <Label check>
+                    <Input
+                      type="checkbox"
+                      name="agree"
+                      checked={agree}
+                      onChange={(e) => setAgree(e.target.value)}
+                    />
+                    <strong>May we concact you?</strong>
+                  </Label>
+                </FormGroup>
+              </Col>
+              <Col md={{ size: 3, offset: 1 }}>
+                <Input
+                  type="select"
+                  name="contactType"
+                  value={contactType}
+                  onChange={(e) => setContactType(e.target.value)}
+                >
+                  <option value="">Tel.</option>
+                  <option value="">Email</option>
+                </Input>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label htmlFor="message" md={2}>
+                Your Feedback
+              </Label>
+              <Col md={10}>
+                <Input
+                  type="textarea"
+                  id="message"
+                  name="message"
+                  rows="12"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                ></Input>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col md={{ size: 10, offset: 2 }}>
+                <Button type="submit" color="primary">
+                  Send Feedback
+                </Button>
+              </Col>
+            </FormGroup>
+          </Form>
         </div>
       </div>
     </div>

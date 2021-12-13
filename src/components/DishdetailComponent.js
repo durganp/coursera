@@ -1,9 +1,29 @@
 import React from "react";
-import { Card, CardBody, CardImg, CardText, CardTitle } from "reactstrap";
+import { Link } from "react-router-dom";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  Card,
+  CardBody,
+  CardImg,
+  CardText,
+  CardTitle,
+} from "reactstrap";
 
-function DishDetail({ dish }) {
-  return dish ? (
+function DishDetail({ dish, comments }) {
+  return (
     <div className="container">
+      <div className="row">
+        <Breadcrumb>
+          <BreadcrumbItem>
+            <Link to="/menu">Menu</Link>
+          </BreadcrumbItem>
+          <BreadcrumbItem active>{dish.name} </BreadcrumbItem>
+        </Breadcrumb>
+        <div className="col-12">
+          <h3>{dish.name} </h3>
+        </div>
+      </div>
       <div className="row">
         <div className="col-12 col-md-5 m-1">
           <Card>
@@ -18,19 +38,17 @@ function DishDetail({ dish }) {
         </div>
         <div className="text-left col-12 col-md-5 m-1">
           <h4>Comments</h4>
-          {dish.comments.map((comments) => {
+          {comments.map((comment) => {
             return (
-              <ul key={comments.id} className="list-unstyled">
-                <li>--{comments.comment}</li>
-                <li>{`${comments.author}, ${comments.date}`}</li>
+              <ul key={comment.id} className="list-unstyled">
+                <li>--{comment.comment}</li>
+                <li>{`${comment.author}, ${comment.date}`}</li>
               </ul>
             );
           })}
         </div>
       </div>
     </div>
-  ) : (
-    <div></div>
   );
 }
 
